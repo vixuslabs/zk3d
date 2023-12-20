@@ -1,0 +1,12 @@
+# NodeJS
+node_modules
+build
+coverage
+dist
+
+# Editor
+.vscode
+
+# System
+.DS_Store
+

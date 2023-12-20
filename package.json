@@ -1,0 +1,27 @@
+{
+  "name": "zk3d",
+  "version": "0.0.1",
+  "description": "General-purpose 3D library compatible with o1js and Mina zkApps.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "tsc -w"
+  },
+  "files": [
+    "/dist"
+  ],
+  "keywords": [
+    "o1js",
+    "mina",
+    "zkApp",
+    "three.js",
+    "3D"
+  ],
+  "author": "Rafael Campos",
+  "license": "ISC",
+  "dependencies": {
+    "o1js": "^0.15.0"
+  }
+}
