@@ -1,5 +1,6 @@
 import { Field, Poseidon, Struct, Provable, Int64 } from "o1js";
 import { SCALE } from "./zk3d";
+import { Matrix4 } from "./Matrix4";
 
 export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
   constructor(value: { x: Int64; y: Int64; z: Int64 }) {
@@ -146,14 +147,23 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
     return this;
   }
 
-
-
   // TODO: applyEuler
 
   // TODO: applyAxisAngle
 
   // TODO: applyMatrix3
 
-  // TODO: applyMatrix4
+  applyMatrix4(m: Matrix4) {
+    const x = this.x;
+    const y = this.y;
+    const z = this.z;
+    
+    const w = SCALE.div(m.n14.mul(x) .add(m.n24.mul(y)) .add(m.n34.mul(z)) .add(m.n44).mul(SCALE));
 
+    this.x = m.n11.mul(x).add(m.n21.mul(y)).add(m.n31.mul(z)).add(m.n41.mul(SCALE)).mul(w);
+    this.y = m.n12.mul(x).add(m.n22.mul(y)).add(m.n32.mul(z)).add(m.n42.mul(SCALE)).mul(w);
+    this.z = m.n13.mul(x).add(m.n23.mul(y)).add(m.n33.mul(z)).add(m.n43.mul(SCALE)).mul(w);
+
+    return this;
+  }
 }
