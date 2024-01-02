@@ -1,10 +1,25 @@
 import { Field, Poseidon, Struct, Provable, Int64 } from "o1js";
-import { SCALE } from "./zk3d";
-import { Matrix4 } from "./Matrix4";
+import { SCALE } from "./zk3d.js";
+import { Matrix4 } from "./Matrix4.js";
+
+const i64SCALE = Int64.from(SCALE);
 
 export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
   constructor(value: { x: Int64; y: Int64; z: Int64 }) {
     super(value);
+  }
+
+  static fromNumbers(x: number , y: number, z: number) {
+    return new Vector3({ 
+      x: Int64.from(Math.round(x * SCALE)),
+      y: Int64.from(Math.round(y * SCALE)),
+      z: Int64.from(Math.round(z * SCALE)),
+    });
+  }
+
+  toString() {
+    return `Vector3(${this.x.toString()}, ${this.y.toString()}, ${this.z.toString()})`;
+    // return "Bla"
   }
 
   set(x: Int64, y: Int64, z: Int64 ) {
@@ -158,12 +173,108 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
     const y = this.y;
     const z = this.z;
     
-    const w = SCALE.div(m.n14.mul(x) .add(m.n24.mul(y)) .add(m.n34.mul(z)) .add(m.n44).mul(SCALE));
+    const w = i64SCALE.div(m.n14.mul(x) .add(m.n24.mul(y)) .add(m.n34.mul(z)) .add(m.n44).mul(i64SCALE));
 
-    this.x = m.n11.mul(x).add(m.n21.mul(y)).add(m.n31.mul(z)).add(m.n41.mul(SCALE)).mul(w);
-    this.y = m.n12.mul(x).add(m.n22.mul(y)).add(m.n32.mul(z)).add(m.n42.mul(SCALE)).mul(w);
-    this.z = m.n13.mul(x).add(m.n23.mul(y)).add(m.n33.mul(z)).add(m.n43.mul(SCALE)).mul(w);
+    this.x = m.n11.mul(x).add(m.n21.mul(y)).add(m.n31.mul(z)).add(m.n41.mul(i64SCALE)).mul(w);
+    this.y = m.n12.mul(x).add(m.n22.mul(y)).add(m.n32.mul(z)).add(m.n42.mul(i64SCALE)).mul(w);
+    this.z = m.n13.mul(x).add(m.n23.mul(y)).add(m.n33.mul(z)).add(m.n43.mul(i64SCALE)).mul(w);
 
     return this;
   }
+
+  setFromMatrixColumn(m: Matrix4, index: number) {
+    return this.fromArray(m.toArray(), index * 4);
+  }
+
+  setFromMatrix3Column(m: Matrix4, index: number) {
+    return this.fromArray(m.toArray(), index * 3);
+  }
+
+  fromArray(array: Int64[], offset: number = 0) {
+    this.x = array[offset];
+    this.y = array[offset + 1];
+    this.z = array[offset + 2];
+    return this;
+  }
+
+  // transformDirection(m: Matrix4) {
+  //   const x = this.x;
+  //   const y = this.y;
+  //   const z = this.z;
+
+  //   this.x = m.n11.mul(x).add(m.n21.mul(y)).add(m.n31.mul(z)).mul(i64SCALE);
+  //   this.y = m.n12.mul(x).add(m.n22.mul(y)).add(m.n32.mul(z)).mul(i64SCALE);
+  //   this.z = m.n13.mul(x).add(m.n23.mul(y)).add(m.n33.mul(z)).mul(i64SCALE);
+
+  //   return this.normalize();
+  // }
+
+  divide(v: Vector3) {
+    this.x.div(v.x);
+    this.y.div(v.y);
+    this.z.div(v.z);
+    return this;
+  }
+
+  divideScalar(s: Int64) {
+    return this.multiplyScalar(i64SCALE.div(s));
+  }
+
+  negate() {
+    this.x.neg();
+    this.y.neg();
+    this.z.neg();
+    return this;
+  }
+
+  dot(v: Vector3) {
+    return this.x.mul(v.x).add(this.y.mul(v.y)).add(this.z.mul(v.z));
+  }
+
+  lengthSq() {
+    return this.x.mul(this.x).add(this.y.mul(this.y)).add(this.z.mul(this.z));
+  }
+
+  // length() {
+  //   return this.lengthSq().sqrt();
+  // }
+
+  // setLength(length: Int64) {
+  //   return this.normalize().multiplyScalar(length);
+  // }
+
+  lerp(v: Vector3, alpha: Int64) {
+    this.x.add(v.x.sub(this.x).mul(alpha));
+    this.y.add(v.y.sub(this.y).mul(alpha));
+    this.z.add(v.z.sub(this.z).mul(alpha));
+    return this;
+  }
+
+  lerpVectors(v1: Vector3, v2: Vector3, alpha: Int64) {
+    return this.subVectors(v2, v1).multiplyScalar(alpha).add(v1);
+  }
+
+  cross(v: Vector3) {
+    return this.crossVectors(this, v);
+  }
+
+  crossVectors(a: Vector3, b: Vector3) {
+    const ax = a.x;
+    const ay = a.y;
+    const az = a.z;
+    const bx = b.x;
+    const by = b.y;
+    const bz = b.z;
+
+    this.x = ay.mul(bz).sub(az.mul(by));
+    this.y = az.mul(bx).sub(ax.mul(bz));
+    this.z = ax.mul(by).sub(ay.mul(bx));
+
+    return this;
+  }
+
+  // normalize() {
+  //   return this.divideScalar(this.length());
+  // }
+  
 }

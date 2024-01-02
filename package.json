@@ -1,16 +1,17 @@
 {
   "name": "zk3d",
-  "version": "0.0.1",
+  "version": "0.0.9",
   "description": "General-purpose 3D library compatible with o1js and Mina zkApps.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "build/src/index.js",
+  "types": "build/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tsc -w"
   },
   "files": [
-    "/dist"
+    "/build/src"
   ],
   "keywords": [
     "o1js",
@@ -22,6 +23,6 @@
   "author": "Rafael Campos",
   "license": "ISC",
   "dependencies": {
-    "o1js": "^0.15.0"
+    "o1js": "^0.15.2"
   }
 }

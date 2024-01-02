@@ -1,6 +1,8 @@
 import { Field, Poseidon, Struct, Provable, Int64 } from "o1js";
-import { SCALE } from "./zk3d";
-import { Vector3} from "./Vector3";
+import { SCALE } from "./zk3d.js";
+import { Vector3} from "./Vector3.js";
+
+const i64SCALE = Int64.from(SCALE);
 
 export class Matrix4 extends Struct({
   n11: Int64,
@@ -148,27 +150,29 @@ export class Matrix4 extends Struct({
     return this;
   }
 
-  setFromMatrix3(m: Matrix3) {
-    this.set(
-      m.n11,
-      m.n12,
-      m.n13,
-      Int64.from(0),
-      m.n21,
-      m.n22,
-      m.n23,
-      Int64.from(0),
-      m.n31,
-      m.n32,
-      m.n33,
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(1)
-    );
-    return this;
-  }
+  // TODO: Implement Matrix3 
+
+  // setFromMatrix3(m: Matrix3) {
+  //   this.set(
+  //     m.n11,
+  //     m.n12,
+  //     m.n13,
+  //     Int64.from(0),
+  //     m.n21,
+  //     m.n22,
+  //     m.n23,
+  //     Int64.from(0),
+  //     m.n31,
+  //     m.n32,
+  //     m.n33,
+  //     Int64.from(0),
+  //     Int64.from(0),
+  //     Int64.from(0),
+  //     Int64.from(0),
+  //     Int64.from(1)
+  //   );
+  //   return this;
+  // }
 
   extractBasis(xAxis: Vector3, yAxis: Vector3, zAxis: Vector3) {
     xAxis.setFromMatrixColumn(this, 0);
@@ -350,7 +354,7 @@ export class Matrix4 extends Struct({
       );
     }
 
-    const detInv = SCALE.div(det);
+    const detInv = i64SCALE.div(det);
 
     this.n11 = t11.mul(detInv);
     this.n21 = t12.mul(detInv);

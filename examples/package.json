@@ -1,0 +1,20 @@
+{
+  "name": "zk3d-examples",
+  "version": "0.0.1",
+  "description": "Sample use cases for the zk3d npm package.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "tsc -w"
+  },
+  "author": "Rafael Campos <rafa@vixuslabs.com>",
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.160.0"
+  }
+}
