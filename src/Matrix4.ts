@@ -1,65 +1,64 @@
-import { Field, Poseidon, Struct, Provable, Int64 } from "o1js";
+import { Field, Poseidon, Struct, Provable } from "o1js";
 import { SCALE } from "./zk3d.js";
 import { Vector3} from "./Vector3.js";
-
-const i64SCALE = Int64.from(SCALE);
+import { Real64 } from "./Real64.js";
 
 export class Matrix4 extends Struct({
-  n11: Int64,
-  n12: Int64,
-  n13: Int64,
-  n14: Int64,
-  n21: Int64,
-  n22: Int64,
-  n23: Int64,
-  n24: Int64,
-  n31: Int64,
-  n32: Int64,
-  n33: Int64,
-  n34: Int64,
-  n41: Int64,
-  n42: Int64,
-  n43: Int64,
-  n44: Int64,
+  n11: Real64,
+  n12: Real64,
+  n13: Real64,
+  n14: Real64,
+  n21: Real64,
+  n22: Real64,
+  n23: Real64,
+  n24: Real64,
+  n31: Real64,
+  n32: Real64,
+  n33: Real64,
+  n34: Real64,
+  n41: Real64,
+  n42: Real64,
+  n43: Real64,
+  n44: Real64,
 }) {
   constructor(value: {
-    n11: Int64;
-    n12: Int64;
-    n13: Int64;
-    n14: Int64;
-    n21: Int64;
-    n22: Int64;
-    n23: Int64;
-    n24: Int64;
-    n31: Int64;
-    n32: Int64;
-    n33: Int64;
-    n34: Int64;
-    n41: Int64;
-    n42: Int64;
-    n43: Int64;
-    n44: Int64;
+    n11: Real64;
+    n12: Real64;
+    n13: Real64;
+    n14: Real64;
+    n21: Real64;
+    n22: Real64;
+    n23: Real64;
+    n24: Real64;
+    n31: Real64;
+    n32: Real64;
+    n33: Real64;
+    n34: Real64;
+    n41: Real64;
+    n42: Real64;
+    n43: Real64;
+    n44: Real64;
   }) {
     super(value);
   }
 
   set(
-    n11: Int64,
-    n12: Int64,
-    n13: Int64,
-    n14: Int64,
-    n21: Int64,
-    n22: Int64,
-    n23: Int64,
-    n24: Int64,
-    n31: Int64,
-    n32: Int64,
-    n33: Int64,
-    n34: Int64,
-    n41: Int64,
-    n42: Int64,
-    n43: Int64,
-    n44: Int64
+    n11: Real64,
+    n12: Real64,
+    n13: Real64,
+    n14: Real64,
+    n21: Real64,
+    n22: Real64,
+    n23: Real64,
+    n24: Real64,
+    n31: Real64,
+    n32: Real64,
+    n33: Real64,
+    n34: Real64,
+    n41: Real64,
+    n42: Real64,
+    n43: Real64,
+    n44: Real64
   ) {
     this.n11 = n11;
     this.n12 = n12;
@@ -82,22 +81,22 @@ export class Matrix4 extends Struct({
 
   identity() {
     this.set(
-      Int64.from(1),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(1),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(1),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(1)
+      Real64.from(1),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(1),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(1),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(1)
     );
     return this;
   }
@@ -157,19 +156,19 @@ export class Matrix4 extends Struct({
   //     m.n11,
   //     m.n12,
   //     m.n13,
-  //     Int64.from(0),
+  //     Real64.from(0),
   //     m.n21,
   //     m.n22,
   //     m.n23,
-  //     Int64.from(0),
+  //     Real64.from(0),
   //     m.n31,
   //     m.n32,
   //     m.n33,
-  //     Int64.from(0),
-  //     Int64.from(0),
-  //     Int64.from(0),
-  //     Int64.from(0),
-  //     Int64.from(1)
+  //     Real64.from(0),
+  //     Real64.from(0),
+  //     Real64.from(0),
+  //     Real64.from(0),
+  //     Real64.from(1)
   //   );
   //   return this;
   // }
@@ -186,19 +185,19 @@ export class Matrix4 extends Struct({
       xAxis.x,
       yAxis.x,
       zAxis.x,
-      Int64.from(0),
+      Real64.from(0),
       xAxis.y,
       yAxis.y,
       zAxis.y,
-      Int64.from(0),
+      Real64.from(0),
       xAxis.z,
       yAxis.z,
       zAxis.z,
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(1)
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(1)
     );
     return this;
   }
@@ -250,7 +249,7 @@ export class Matrix4 extends Struct({
     return this;
   }
 
-  multiplyScalar(s: Int64) {
+  multiplyScalar(s: Real64) {
     this.n11.mul(s);
     this.n12.mul(s);
     this.n13.mul(s);
@@ -305,7 +304,7 @@ export class Matrix4 extends Struct({
         )
       ))
       .add(n44.mul(
-        Int64.zero.sub(n13.mul(n22.mul(n31)))
+        Real64.zero.sub(n13.mul(n22.mul(n31)))
         .sub(n11.mul(n23.mul(n32)))
         .add(n11.mul(n22.mul(n33)))
         .add(n13.mul(n21.mul(n32)))
@@ -316,7 +315,7 @@ export class Matrix4 extends Struct({
   }
 
   transpose() {
-    let tmp: Int64;
+    let tmp: Real64;
     tmp = this.n12; this.n12 = this.n21; this.n21 = tmp;
     tmp = this.n13; this.n13 = this.n31; this.n31 = tmp;
     tmp = this.n14; this.n14 = this.n41; this.n41 = tmp;
@@ -345,36 +344,34 @@ export class Matrix4 extends Struct({
     const t14 = n14.mul(n23.mul(n32)) .sub(n13.mul(n24.mul(n32))) .sub(n14.mul(n22.mul(n33))) .add(n12.mul(n24.mul(n33))) .add(n13.mul(n22.mul(n34))) .sub(n12.mul(n23.mul(n34)));
 
     const det = n11.mul(t11) .add(n21.mul(t12)) .add(n31.mul(t13)) .add(n41.mul(t14));
-    if (det.equals(Int64.zero)) {
+    if (det.equals(Real64.zero)) {
       return this.set(
-        Int64.zero, Int64.zero, Int64.zero, Int64.zero,
-        Int64.zero, Int64.zero, Int64.zero, Int64.zero,
-        Int64.zero, Int64.zero, Int64.zero, Int64.zero,
-        Int64.zero, Int64.zero, Int64.zero, Int64.zero
+        Real64.zero, Real64.zero, Real64.zero, Real64.zero,
+        Real64.zero, Real64.zero, Real64.zero, Real64.zero,
+        Real64.zero, Real64.zero, Real64.zero, Real64.zero,
+        Real64.zero, Real64.zero, Real64.zero, Real64.zero
       );
     }
 
-    const detInv = i64SCALE.div(det);
+    this.n11 = t11.mul(det.inv());
+    this.n21 = t12.mul(det.inv());
+    this.n31 = t13.mul(det.inv());
+    this.n41 = t14.mul(det.inv());
 
-    this.n11 = t11.mul(detInv);
-    this.n21 = t12.mul(detInv);
-    this.n31 = t13.mul(detInv);
-    this.n41 = t14.mul(detInv);
+    this.n12 = n24.mul(n33.mul(n41)) .sub(n23.mul(n34.mul(n41))) .sub(n24.mul(n31.mul(n43))) .add(n21.mul(n34.mul(n43))) .add(n23.mul(n31.mul(n44))) .sub(n21.mul(n33.mul(n44))) .mul(det.inv());
+    this.n22 = n13.mul(n34.mul(n41)) .sub(n14.mul(n33.mul(n41))) .add(n14.mul(n31.mul(n43))) .sub(n11.mul(n34.mul(n43))) .sub(n13.mul(n31.mul(n44))) .add(n11.mul(n33.mul(n44))) .mul(det.inv());
+    this.n32 = n14.mul(n23.mul(n41)) .sub(n13.mul(n24.mul(n41))) .sub(n14.mul(n21.mul(n43))) .add(n11.mul(n24.mul(n43))) .add(n13.mul(n21.mul(n44))) .sub(n11.mul(n23.mul(n44))) .mul(det.inv());
+    this.n42 = n13.mul(n24.mul(n31)) .sub(n14.mul(n23.mul(n31))) .add(n14.mul(n21.mul(n33))) .sub(n11.mul(n24.mul(n33))) .sub(n13.mul(n21.mul(n34))) .add(n11.mul(n23.mul(n34))) .mul(det.inv());
 
-    this.n12 = n24.mul(n33.mul(n41)) .sub(n23.mul(n34.mul(n41))) .sub(n24.mul(n31.mul(n43))) .add(n21.mul(n34.mul(n43))) .add(n23.mul(n31.mul(n44))) .sub(n21.mul(n33.mul(n44))) .mul(detInv);
-    this.n22 = n13.mul(n34.mul(n41)) .sub(n14.mul(n33.mul(n41))) .add(n14.mul(n31.mul(n43))) .sub(n11.mul(n34.mul(n43))) .sub(n13.mul(n31.mul(n44))) .add(n11.mul(n33.mul(n44))) .mul(detInv);
-    this.n32 = n14.mul(n23.mul(n41)) .sub(n13.mul(n24.mul(n41))) .sub(n14.mul(n21.mul(n43))) .add(n11.mul(n24.mul(n43))) .add(n13.mul(n21.mul(n44))) .sub(n11.mul(n23.mul(n44))) .mul(detInv);
-    this.n42 = n13.mul(n24.mul(n31)) .sub(n14.mul(n23.mul(n31))) .add(n14.mul(n21.mul(n33))) .sub(n11.mul(n24.mul(n33))) .sub(n13.mul(n21.mul(n34))) .add(n11.mul(n23.mul(n34))) .mul(detInv);
+    this.n13 = n22.mul(n34.mul(n41)) .sub(n24.mul(n32.mul(n41))) .add(n24.mul(n31.mul(n42))) .sub(n21.mul(n34.mul(n42))) .sub(n22.mul(n31.mul(n44))) .add(n21.mul(n32.mul(n44))) .mul(det.inv());
+    this.n23 = n14.mul(n32.mul(n41)) .sub(n12.mul(n34.mul(n41))) .sub(n14.mul(n31.mul(n42))) .add(n11.mul(n34.mul(n42))) .add(n12.mul(n31.mul(n44))) .sub(n11.mul(n32.mul(n44))) .mul(det.inv());
+    this.n33 = n12.mul(n24.mul(n41)) .sub(n14.mul(n22.mul(n41))) .add(n14.mul(n21.mul(n42))) .sub(n11.mul(n24.mul(n42))) .sub(n12.mul(n21.mul(n44))) .add(n11.mul(n22.mul(n44))) .mul(det.inv());
+    this.n43 = n14.mul(n22.mul(n31)) .sub(n12.mul(n24.mul(n31))) .sub(n14.mul(n21.mul(n32))) .add(n11.mul(n24.mul(n32))) .add(n12.mul(n21.mul(n34))) .sub(n11.mul(n22.mul(n34))) .mul(det.inv());
 
-    this.n13 = n22.mul(n34.mul(n41)) .sub(n24.mul(n32.mul(n41))) .add(n24.mul(n31.mul(n42))) .sub(n21.mul(n34.mul(n42))) .sub(n22.mul(n31.mul(n44))) .add(n21.mul(n32.mul(n44))) .mul(detInv);
-    this.n23 = n14.mul(n32.mul(n41)) .sub(n12.mul(n34.mul(n41))) .sub(n14.mul(n31.mul(n42))) .add(n11.mul(n34.mul(n42))) .add(n12.mul(n31.mul(n44))) .sub(n11.mul(n32.mul(n44))) .mul(detInv);
-    this.n33 = n12.mul(n24.mul(n41)) .sub(n14.mul(n22.mul(n41))) .add(n14.mul(n21.mul(n42))) .sub(n11.mul(n24.mul(n42))) .sub(n12.mul(n21.mul(n44))) .add(n11.mul(n22.mul(n44))) .mul(detInv);
-    this.n43 = n14.mul(n22.mul(n31)) .sub(n12.mul(n24.mul(n31))) .sub(n14.mul(n21.mul(n32))) .add(n11.mul(n24.mul(n32))) .add(n12.mul(n21.mul(n34))) .sub(n11.mul(n22.mul(n34))) .mul(detInv);
-
-    this.n14 = n23.mul(n32.mul(n41)) .sub(n22.mul(n33.mul(n41))) .sub(n23.mul(n31.mul(n42))) .add(n21.mul(n33.mul(n42))) .add(n22.mul(n31.mul(n43))) .sub(n21.mul(n32.mul(n43))) .mul(detInv);
-    this.n24 = n12.mul(n33.mul(n41)) .sub(n13.mul(n32.mul(n41))) .add(n13.mul(n31.mul(n42))) .sub(n11.mul(n33.mul(n42))) .sub(n12.mul(n31.mul(n43))) .add(n11.mul(n32.mul(n43))) .mul(detInv);
-    this.n34 = n13.mul(n22.mul(n41)) .sub(n12.mul(n23.mul(n41))) .sub(n13.mul(n21.mul(n42))) .add(n11.mul(n23.mul(n42))) .add(n12.mul(n21.mul(n43))) .sub(n11.mul(n22.mul(n43))) .mul(detInv);
-    this.n44 = n12.mul(n23.mul(n31)) .sub(n13.mul(n22.mul(n31))) .add(n13.mul(n21.mul(n32))) .sub(n11.mul(n23.mul(n32))) .sub(n12.mul(n21.mul(n33))) .add(n11.mul(n22.mul(n33))) .mul(detInv);
+    this.n14 = n23.mul(n32.mul(n41)) .sub(n22.mul(n33.mul(n41))) .sub(n23.mul(n31.mul(n42))) .add(n21.mul(n33.mul(n42))) .add(n22.mul(n31.mul(n43))) .sub(n21.mul(n32.mul(n43))) .mul(det.inv());
+    this.n24 = n12.mul(n33.mul(n41)) .sub(n13.mul(n32.mul(n41))) .add(n13.mul(n31.mul(n42))) .sub(n11.mul(n33.mul(n42))) .sub(n12.mul(n31.mul(n43))) .add(n11.mul(n32.mul(n43))) .mul(det.inv());
+    this.n34 = n13.mul(n22.mul(n41)) .sub(n12.mul(n23.mul(n41))) .sub(n13.mul(n21.mul(n42))) .add(n11.mul(n23.mul(n42))) .add(n12.mul(n21.mul(n43))) .sub(n11.mul(n22.mul(n43))) .mul(det.inv());
+    this.n44 = n12.mul(n23.mul(n31)) .sub(n13.mul(n22.mul(n31))) .add(n13.mul(n21.mul(n32))) .sub(n11.mul(n23.mul(n32))) .sub(n12.mul(n21.mul(n33))) .add(n11.mul(n22.mul(n33))) .mul(det.inv());
 
     return this;
   }
@@ -398,49 +395,49 @@ export class Matrix4 extends Struct({
 
   // TODO: getMaxScaleOnAxis
 
-  makeTranslation(x: Int64, y: Int64, z: Int64) {
+  makeTranslation(x: Real64, y: Real64, z: Real64) {
     this.set(
-      Int64.from(1),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(1),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(0),
-      Int64.from(1),
-      Int64.from(0),
+      Real64.from(1),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(1),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(1),
+      Real64.from(0),
       x,
       y,
       z,
-      Int64.from(1)
+      Real64.from(1)
     );
     return this;
   }
 
-  // TODO: Figure out how to implement trigonometric functions with Int64
-  // makeRotationX(theta: Int64) {
+  // TODO: Figure out how to implement trigonometric functions with Real64
+  // makeRotationX(theta: Real64) {
   //   const c = theta.cos();
   //   const s = theta.sin();
   //   this.set(
-  //     Int64.from(1),
-  //     Int64.from(0),
-  //     Int64.from(0),
-  //     Int64.from(0),
-  //     Int64.from(0),
+  //     Real64.from(1),
+  //     Real64.from(0),
+  //     Real64.from(0),
+  //     Real64.from(0),
+  //     Real64.from(0),
   //     c,
   //     s,
-  //     Int64.from(0),
-  //     Int64.from(0),
-  //     Int64.zero.sub(s),
+  //     Real64.from(0),
+  //     Real64.from(0),
+  //     Real64.zero.sub(s),
   //     c,
-  //     Int64.from(0),
-  //     Int64.from(0),
-  //     Int64.from(0),
-  //     Int64.from(0),
-  //     Int64.from(1)
+  //     Real64.from(0),
+  //     Real64.from(0),
+  //     Real64.from(0),
+  //     Real64.from(0),
+  //     Real64.from(1)
   //   );
   //   return this;
   // }
@@ -449,46 +446,46 @@ export class Matrix4 extends Struct({
   // TODO: makeRotationZ
   // TODO: makeRotationAxis
 
-  makeScale(x: Int64, y: Int64, z: Int64) {
+  makeScale(x: Real64, y: Real64, z: Real64) {
     this.set(
       x,
-      Int64.zero,
-      Int64.zero,
-      Int64.zero,
-      Int64.zero,
+      Real64.zero,
+      Real64.zero,
+      Real64.zero,
+      Real64.zero,
       y,
-      Int64.zero,
-      Int64.zero,
-      Int64.zero,
-      Int64.zero,
+      Real64.zero,
+      Real64.zero,
+      Real64.zero,
+      Real64.zero,
       z,
-      Int64.zero,
-      Int64.zero,
-      Int64.zero,
-      Int64.zero,
-      Int64.from(1)
+      Real64.zero,
+      Real64.zero,
+      Real64.zero,
+      Real64.zero,
+      Real64.from(1)
     );
     return this;
   }
 
-  makeShear(x: Int64, y: Int64, z: Int64) {
+  makeShear(x: Real64, y: Real64, z: Real64) {
     this.set(
-      Int64.from(1),
+      Real64.from(1),
       y,
       z,
-      Int64.zero,
+      Real64.zero,
       x,
-      Int64.from(1),
+      Real64.from(1),
       z,
-      Int64.zero,
+      Real64.zero,
       x,
       y,
-      Int64.from(1),
-      Int64.zero,
-      Int64.zero,
-      Int64.zero,
-      Int64.zero,
-      Int64.from(1)
+      Real64.from(1),
+      Real64.zero,
+      Real64.zero,
+      Real64.zero,
+      Real64.zero,
+      Real64.from(1)
     );
     return this;
   }
@@ -517,7 +514,7 @@ export class Matrix4 extends Struct({
     );
   }
 
-  fromArray(array: Int64[]) {
+  fromArray(array: Real64[]) {
     this.n11 = array[0];
     this.n12 = array[1];
     this.n13 = array[2];

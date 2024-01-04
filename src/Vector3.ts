@@ -1,57 +1,54 @@
-import { Field, Poseidon, Struct, Provable, Int64 } from "o1js";
-import { SCALE } from "./zk3d.js";
+import { Field, Poseidon, Struct, Provable } from "o1js";
 import { Matrix4 } from "./Matrix4.js";
+import { Real64 } from "./Real64.js";
 
-const i64SCALE = Int64.from(SCALE);
-
-export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
-  constructor(value: { x: Int64; y: Int64; z: Int64 }) {
+export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) {
+  constructor(value: { x: Real64; y: Real64; z: Real64 }) {
     super(value);
   }
 
   static fromNumbers(x: number , y: number, z: number) {
     return new Vector3({ 
-      x: Int64.from(Math.round(x * SCALE)),
-      y: Int64.from(Math.round(y * SCALE)),
-      z: Int64.from(Math.round(z * SCALE)),
+      x: Real64.from(x),
+      y: Real64.from(y),
+      z: Real64.from(z),
     });
   }
 
   toString() {
-    return `Vector3(${this.x.toString()}, ${this.y.toString()}, ${this.z.toString()})`;
-    // return "Bla"
+    return `Vector3( ${this.x.toString()}, ${this.y.toString()}, ${this.z.toString()} )`;
   }
 
-  set(x: Int64, y: Int64, z: Int64 ) {
+  set(x: Real64, y: Real64, z: Real64 ) {
     this.x = x;
     this.y = y;
     this.z = z;
     return this;
   }
 
-  setScalar(scalar: Int64) {
+  setScalar(scalar: Real64) {
     this.x = scalar;
     this.y = scalar;
     this.z = scalar;
     return this;
   }
 
-  setX(x: Int64) {
+  setX(x: Real64) {
     this.x = x;
     return this;
   }
 
-  setY(y: Int64) {
+  setY(y: Real64) {
     this.y = y;
     return this;
   }
 
-  setZ(z: Int64) {
+  setZ(z: Real64) {
     this.z = z;
     return this;
   }
 
-  setComponent(index: number, value: Int64) {
+  setComponent(index: number, value: Real64) {
     switch (index) {
       case 0:
         this.x = value;
@@ -93,13 +90,13 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
   }
 
   add(v: Vector3) {
-    this.x.add(v.x);
-    this.y.add(v.y);
-    this.z.add(v.z);
+    this.x = this.x.add(v.x);
+    this.y = this.y.add(v.y);
+    this.z = this.z.add(v.z);
     return this;
   }
 
-  addScalar(s: Int64) {
+  addScalar(s: Real64) {
     this.x.add(s);
     this.y.add(s);
     this.z.add(s);
@@ -113,7 +110,7 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
     return this;
   }
 
-  addScaledVector(v: Vector3, s: Int64) {
+  addScaledVector(v: Vector3, s: Real64) {
     this.x.add(v.x.mul(s));
     this.y.add(v.y.mul(s));
     this.z.add(v.z.mul(s));
@@ -121,13 +118,13 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
   }
 
   sub(v: Vector3) {
-    this.x.sub(v.x);
-    this.y.sub(v.y);
-    this.z.sub(v.z);
+    this.x = this.x.sub(v.x);
+    this.y = this.y.sub(v.y);
+    this.z = this.z.sub(v.z);
     return this;
   }
 
-  subScalar(s: Int64) {
+  subScalar(s: Real64) {
     this.x.sub(s);
     this.y.sub(s);
     this.z.sub(s);
@@ -142,16 +139,16 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
   }
 
   multiply(v: Vector3) {
-    this.x.mul(v.x);
-    this.y.mul(v.y);
-    this.z.mul(v.z);
+    this.x = this.x.mul(v.x);
+    this.y = this.y.mul(v.y);
+    this.z = this.z.mul(v.z);
     return this;
   }
 
-  multiplyScalar(s: Int64) {
-    this.x.mul(s);
-    this.y.mul(s);
-    this.z.mul(s);
+  multiplyScalar(s: Real64) {
+    this.x = this.x.mul(s);
+    this.y = this.y.mul(s);
+    this.z = this.z.mul(s);
     return this;
   }
 
@@ -173,11 +170,12 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
     const y = this.y;
     const z = this.z;
     
-    const w = i64SCALE.div(m.n14.mul(x) .add(m.n24.mul(y)) .add(m.n34.mul(z)) .add(m.n44).mul(i64SCALE));
+    const w = m.n14.mul(x) .add(m.n24.mul(y)) .add(m.n34.mul(z)) .add(m.n44);
+    const invw = w.inv();
 
-    this.x = m.n11.mul(x).add(m.n21.mul(y)).add(m.n31.mul(z)).add(m.n41.mul(i64SCALE)).mul(w);
-    this.y = m.n12.mul(x).add(m.n22.mul(y)).add(m.n32.mul(z)).add(m.n42.mul(i64SCALE)).mul(w);
-    this.z = m.n13.mul(x).add(m.n23.mul(y)).add(m.n33.mul(z)).add(m.n43.mul(i64SCALE)).mul(w);
+    this.x = m.n11.mul(x).add(m.n21.mul(y)).add(m.n31.mul(z)).add(m.n41).mul(invw);
+    this.y = m.n12.mul(x).add(m.n22.mul(y)).add(m.n32.mul(z)).add(m.n42).mul(invw);
+    this.z = m.n13.mul(x).add(m.n23.mul(y)).add(m.n33.mul(z)).add(m.n43).mul(invw);
 
     return this;
   }
@@ -190,7 +188,7 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
     return this.fromArray(m.toArray(), index * 3);
   }
 
-  fromArray(array: Int64[], offset: number = 0) {
+  fromArray(array: Real64[], offset: number = 0) {
     this.x = array[offset];
     this.y = array[offset + 1];
     this.z = array[offset + 2];
@@ -210,14 +208,17 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
   // }
 
   divide(v: Vector3) {
-    this.x.div(v.x);
-    this.y.div(v.y);
-    this.z.div(v.z);
+    this.x = this.x.div(v.x);
+    this.y = this.y.div(v.y);
+    this.z = this.z.div(v.z);
     return this;
   }
 
-  divideScalar(s: Int64) {
-    return this.multiplyScalar(i64SCALE.div(s));
+  divideScalar(s: Real64) {
+    this.x = this.x.div(s);
+    this.y = this.y.div(s);
+    this.z = this.z.div(s);
+    return this;
   }
 
   negate() {
@@ -235,22 +236,14 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
     return this.x.mul(this.x).add(this.y.mul(this.y)).add(this.z.mul(this.z));
   }
 
-  // length() {
-  //   return this.lengthSq().sqrt();
-  // }
-
-  // setLength(length: Int64) {
-  //   return this.normalize().multiplyScalar(length);
-  // }
-
-  lerp(v: Vector3, alpha: Int64) {
-    this.x.add(v.x.sub(this.x).mul(alpha));
-    this.y.add(v.y.sub(this.y).mul(alpha));
-    this.z.add(v.z.sub(this.z).mul(alpha));
+  lerp(v: Vector3, alpha: Real64) {
+    this.x = this.x.add(v.x.sub(this.x).mul(alpha));
+    this.y = this.y.add(v.y.sub(this.y).mul(alpha));
+    this.z = this.z.add(v.z.sub(this.z).mul(alpha));
     return this;
   }
 
-  lerpVectors(v1: Vector3, v2: Vector3, alpha: Int64) {
+  lerpVectors(v1: Vector3, v2: Vector3, alpha: Real64) {
     return this.subVectors(v2, v1).multiplyScalar(alpha).add(v1);
   }
 
@@ -273,8 +266,15 @@ export class Vector3 extends Struct({ x: Int64, y: Int64, z: Int64 }) {
     return this;
   }
 
-  // normalize() {
-  //   return this.divideScalar(this.length());
-  // }
+  normalizeSq() {
+    return this.divideScalar(this.lengthSq());
+  }
+
+  distanceToSquared(v: Vector3) {
+    const dx = this.x.sub(v.x);
+    const dy = this.y.sub(v.y);
+    const dz = this.z.sub(v.z);
+    return dx.mul(dx).add(dy.mul(dy)).add(dz.mul(dz));
+  }
   
 }
