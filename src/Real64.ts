@@ -20,7 +20,7 @@ export class Real64 extends Struct({ integer: Int64 }) {
   }
 
   inv() {
-    return new Real64({ integer: Int64.from(Real64.SCALE).div(this.integer) });
+    return new Real64({ integer: Int64.from(Real64.SCALE).mul(Real64.SCALE).div(this.integer) });
   }
 
   neg() {

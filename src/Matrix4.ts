@@ -514,24 +514,25 @@ export class Matrix4 extends Struct({
     );
   }
 
-  fromArray(array: Real64[]) {
-    this.n11 = array[0];
-    this.n12 = array[1];
-    this.n13 = array[2];
-    this.n14 = array[3];
-    this.n21 = array[4];
-    this.n22 = array[5];
-    this.n23 = array[6];
-    this.n24 = array[7];
-    this.n31 = array[8];
-    this.n32 = array[9];
-    this.n33 = array[10];
-    this.n34 = array[11];
-    this.n41 = array[12];
-    this.n42 = array[13];
-    this.n43 = array[14];
-    this.n44 = array[15];
-    return this;
+  static fromElements(array: Real64[]) {
+    return new Matrix4({
+      n11: array[0],
+      n12: array[1],
+      n13: array[2],
+      n14: array[3],
+      n21: array[4],
+      n22: array[5],
+      n23: array[6],
+      n24: array[7],
+      n31: array[8],
+      n32: array[9],
+      n33: array[10],
+      n34: array[11],
+      n41: array[12],
+      n42: array[13],
+      n43: array[14],
+      n44: array[15]
+      });
   }
 
   toArray() {
