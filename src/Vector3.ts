@@ -1,4 +1,4 @@
-import { Field, Poseidon, Struct, Provable } from "o1js";
+import { Struct } from "o1js";
 import { Matrix4 } from "./Matrix4.js";
 import { Real64 } from "./Real64.js";
 

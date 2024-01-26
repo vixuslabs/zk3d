@@ -1,5 +1,4 @@
-import { Field, Poseidon, Struct, Provable } from "o1js";
-import { SCALE } from "./zk3d.js";
+import { Struct } from "o1js";
 import { Vector3} from "./Vector3.js";
 import { Real64 } from "./Real64.js";
 

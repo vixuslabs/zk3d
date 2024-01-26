@@ -1,4 +1,4 @@
-import { Field, Poseidon, Struct, Provable, Int64 } from "o1js";
+import { Field, Struct, Int64 } from "o1js";
 
 export class Real64 extends Struct({ integer: Int64 }) {
   constructor(value: { integer: Int64 }) {
@@ -13,6 +13,10 @@ export class Real64 extends Struct({ integer: Int64 }) {
 
   static fromField(x: Field) {
     return new Real64({ integer: Int64.fromField(x) });
+  }
+
+  static fromJsonString(x: string) {
+    return new Real64({ integer: Int64.fromJSON(x) });
   }
 
   static get zero() {
@@ -53,8 +57,6 @@ export class Real64 extends Struct({ integer: Int64 }) {
 
   div(other: Real64) {
     return new Real64({ integer : this.integer.mul(Real64.SCALE).div(other.integer) });
-    // this.integer = this.integer.mul(Real64.SCALE).div(other.integer);
-    // return this;
   }
 
 }
