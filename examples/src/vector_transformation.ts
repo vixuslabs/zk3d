@@ -43,11 +43,6 @@ console.log("\nTesting cross product...");
 console.log("threejs: ", v1t.clone().cross(v2t));
 console.log("zk3d: ", v1z.clone().cross(v2z).toString());
 
-// Test normalization
-console.log("\nTesting normalization...");
-console.log("threejs: ", v1t.clone().normalize());
-console.log("zk3d: ", v1z.clone().normalizeSq().toString());
-
 // Test length
 console.log("\nTesting length squared...");
 console.log("threejs: ", v1t.clone().lengthSq());
