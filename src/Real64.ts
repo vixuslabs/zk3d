@@ -15,6 +15,10 @@ export class Real64 extends Struct({ integer: Int64 }) {
     return new Real64({ integer: Int64.fromField(x) });
   }
 
+  toNumber() {
+    return parseInt(this.integer.toString()) / Real64.SCALE;
+  }
+
   static fromJsonString(x: string) {
     return new Real64({ integer: Int64.fromJSON(x) });
   }

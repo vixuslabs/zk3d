@@ -1,6 +1,6 @@
 import { Struct } from "o1js";
-import { Matrix4 } from "./Matrix4.js";
-import { Real64 } from "./Real64.js";
+import { Matrix4 } from "./Matrix4";
+import { Real64 } from "./Real64";
 
 export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) {
   constructor(value: { x: Real64; y: Real64; z: Real64 }) {
@@ -264,10 +264,6 @@ export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) {
     this.z = ax.mul(by).sub(ay.mul(bx));
 
     return this;
-  }
-
-  normalizeSq() {
-    return this.divideScalar(this.lengthSq());
   }
 
   distanceToSquared(v: Vector3) {
