@@ -1,6 +1,7 @@
 import { Struct } from "o1js";
 import { Vector3} from "./Vector3";
 import { Real64 } from "./Real64";
+import { Matrix3 } from "./Matrix3";
 
 export class Matrix4 extends Struct({
   n11: Real64,
@@ -100,6 +101,27 @@ export class Matrix4 extends Struct({
     return this;
   }
 
+  elements() {
+    return [
+      this.n11,
+      this.n12,
+      this.n13,
+      this.n14,
+      this.n21,
+      this.n22,
+      this.n23,
+      this.n24,
+      this.n31,
+      this.n32,
+      this.n33,
+      this.n34,
+      this.n41,
+      this.n42,
+      this.n43,
+      this.n44,
+    ];
+  }
+
   clone() {
     return new Matrix4({
       n11: this.n11,
@@ -148,29 +170,27 @@ export class Matrix4 extends Struct({
     return this;
   }
 
-  // TODO: Implement Matrix3 
-
-  // setFromMatrix3(m: Matrix3) {
-  //   this.set(
-  //     m.n11,
-  //     m.n12,
-  //     m.n13,
-  //     Real64.from(0),
-  //     m.n21,
-  //     m.n22,
-  //     m.n23,
-  //     Real64.from(0),
-  //     m.n31,
-  //     m.n32,
-  //     m.n33,
-  //     Real64.from(0),
-  //     Real64.from(0),
-  //     Real64.from(0),
-  //     Real64.from(0),
-  //     Real64.from(1)
-  //   );
-  //   return this;
-  // }
+  setFromMatrix3(m: Matrix3) {
+    this.set(
+      m.n11,
+      m.n12,
+      m.n13,
+      Real64.from(0),
+      m.n21,
+      m.n22,
+      m.n23,
+      Real64.from(0),
+      m.n31,
+      m.n32,
+      m.n33,
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(0),
+      Real64.from(1)
+    );
+    return this;
+  }
 
   extractBasis(xAxis: Vector3, yAxis: Vector3, zAxis: Vector3) {
     xAxis.setFromMatrixColumn(this, 0);

@@ -1,6 +1,8 @@
 import { Struct } from "o1js";
 import { Matrix4 } from "./Matrix4";
 import { Real64 } from "./Real64";
+import { Matrix3 } from "./Matrix3";
+
 
 export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) {
   constructor(value: { x: Real64; y: Real64; z: Real64 }) {
@@ -184,7 +186,7 @@ export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) {
     return this.fromArray(m.toArray(), index * 4);
   }
 
-  setFromMatrix3Column(m: Matrix4, index: number) {
+  setFromMatrix3Column(m: Matrix3, index: number) {
     return this.fromArray(m.toArray(), index * 3);
   }
 
