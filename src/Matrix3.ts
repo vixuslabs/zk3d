@@ -257,7 +257,7 @@ export class Matrix3 extends Struct({
       Real64.zero, Real64.zero, Real64.from(1),
     );
     return this;
-  }
+  }    
 
   // TODO: Figure out how to implement trigonometric functions with Real64
   // makeRotation(theta: Real64) {
