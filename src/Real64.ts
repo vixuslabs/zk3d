@@ -1,4 +1,24 @@
-import { Field, Struct, Int64 } from "o1js";
+import { Field, Struct, Int64, Bool } from "o1js";
+
+interface Real64Class {
+  integer: Int64;
+  from: (x: number) => Real64;
+  fromField: (x: Field) => Real64;
+  toField: () => Field;
+  toNumber: () => number;
+  zero: Real64;
+  inv: () => Real64;
+  neg: () => Real64;
+  equals: (other: Real64) => boolean;
+  toString: () => string;
+  clone: () => Real64;
+  add: (other: Real64) => Real64;
+  sub: (other: Real64) => Real64;
+  mul: (other: Real64) => Real64;
+  div: (other: Real64) => Real64;
+  isPositive: () => Bool;
+  setInteger: (integer: Int64) => Real64;
+}
 
 export class Real64 extends Struct({ integer: Int64 }) {
   constructor(value: { integer: Int64 }) {
@@ -15,12 +35,12 @@ export class Real64 extends Struct({ integer: Int64 }) {
     return new Real64({ integer: Int64.fromField(x) });
   }
 
-  toNumber() {
-    return parseInt(this.integer.toString()) / Real64.SCALE;
+  toField() {
+    return this.integer.toField();
   }
 
-  static fromJsonString(x: string) {
-    return new Real64({ integer: Int64.fromJSON(x) });
+  toNumber() {
+    return parseInt(this.integer.toString()) / Real64.SCALE;
   }
 
   static get zero() {
@@ -61,6 +81,15 @@ export class Real64 extends Struct({ integer: Int64 }) {
 
   div(other: Real64) {
     return new Real64({ integer : this.integer.mul(Real64.SCALE).div(other.integer) });
+  }
+
+  isPositive() {
+    return this.integer.isPositive();
+  }
+
+  setInteger(integer: Int64) {
+    this.integer = integer;
+    return this;
   }
 
 }

@@ -1,11 +1,50 @@
 import { Struct } from "o1js";
-import { Matrix4 } from "./Matrix4";
-import { Real64 } from "./Real64";
-import { Matrix3 } from "./Matrix3";
+import { Matrix4 } from "./Matrix4.js";
+import { Real64 } from "./Real64.js";
+import { Matrix3 } from "./Matrix3.js";
 
+interface Vector3Class {
+  x: Real64;
+  y: Real64;
+  z: Real64;
+  toString: () => string;
+  set: (x: Real64, y: Real64, z: Real64) => Vector3;
+  setScalar: (scalar: Real64) => Vector3;
+  setX: (x: Real64) => Vector3;
+  setY: (y: Real64) => Vector3;
+  setZ: (z: Real64) => Vector3;
+  setComponent: (index: number, value: Real64) => Vector3;
+  getComponent: (index: number) => Real64;
+  clone: () => Vector3;
+  copy: (v: Vector3) => Vector3;
+  add: (v: Vector3) => Vector3;
+  addScalar: (s: Real64) => Vector3;
+  addVectors: (a: Vector3, b: Vector3) => Vector3;
+  addScaledVector: (v: Vector3, s: Real64) => Vector3;
+  sub: (v: Vector3) => Vector3;
+  subScalar: (s: Real64) => Vector3;
+  subVectors: (a: Vector3, b: Vector3) => Vector3;
+  multiply: (v: Vector3) => Vector3;
+  multiplyScalar: (s: Real64) => Vector3;
+  multiplyVectors: (a: Vector3, b: Vector3) => Vector3;
+  applyMatrix4: (m: Matrix4) => Vector3;
+  setFromMatrixColumn: (m: Matrix4, index: number) => Vector3;
+  setFromMatrix3Column: (m: Matrix3, index: number) => Vector3;
+  fromArray: (array: Real64[], offset: number) => Vector3;
+  divide: (v: Vector3) => Vector3;
+  divideScalar: (s: Real64) => Vector3;
+  negate: () => Vector3;
+  dot: (v: Vector3) => Real64;
+  lengthSq: () => Real64;
+  lerp: (v: Vector3, alpha: Real64) => Vector3;
+  lerpVectors: (v1: Vector3, v2: Vector3, alpha: Real64) => Vector3;
+  cross: (v: Vector3) => Vector3;
+  crossVectors: (a: Vector3, b: Vector3) => Vector3;
+  distanceToSquared: (v: Vector3) => Real64;
+}
 
-export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) {
-  constructor(value: { x: Real64; y: Real64; z: Real64 }) {
+export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) implements Vector3Class {
+  constructor(value: { x: Real64; y: Real64; z: Real64 }) { 
     super(value);
   }
 
