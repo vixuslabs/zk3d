@@ -1,7 +1,7 @@
 import { Struct } from "o1js";
-import { Vector3} from "./Vector3";
-import { Real64 } from "./Real64";
-import { Matrix4 } from "./Matrix4";
+import { Vector3} from "./Vector3.js";
+import { Real64 } from "./Real64.js";
+import { Matrix4 } from "./Matrix4.js";
 
 export class Matrix3 extends Struct({
   n11: Real64,

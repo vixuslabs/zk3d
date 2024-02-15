@@ -1,5 +1,5 @@
 import { Struct } from "o1js";
-import { Real64 } from "./Real64";
+import { Real64 } from "./Real64.js";
 
 export class Vector2 extends Struct({ x: Real64, y: Real64 }) {
   constructor(value: { x: Real64; y: Real64 }) {
