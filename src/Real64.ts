@@ -2,14 +2,11 @@ import { Field, Struct, Int64, Bool } from "o1js";
 
 interface Real64Class {
   integer: Int64;
-  from: (x: number) => Real64;
-  fromField: (x: Field) => Real64;
   toField: () => Field;
   toNumber: () => number;
-  zero: Real64;
   inv: () => Real64;
   neg: () => Real64;
-  equals: (other: Real64) => boolean;
+  equals: (other: Real64) => Bool;
   toString: () => string;
   clone: () => Real64;
   add: (other: Real64) => Real64;
@@ -20,7 +17,7 @@ interface Real64Class {
   setInteger: (integer: Int64) => Real64;
 }
 
-export class Real64 extends Struct({ integer: Int64 }) {
+export class Real64 extends Struct({ integer: Int64 }) implements Real64Class {
   constructor(value: { integer: Int64 }) {
     super(value);
   }

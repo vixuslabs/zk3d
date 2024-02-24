@@ -1,7 +1,7 @@
 import { Struct } from "o1js";
-import { Matrix4 } from "./Matrix4.js";
-import { Real64 } from "./Real64.js";
-import { Matrix3 } from "./Matrix3.js";
+import { Matrix4 } from "./Matrix4";
+import { Real64 } from "./Real64";
+import { Matrix3 } from "./Matrix3";
 
 interface Vector3Class {
   x: Real64;
@@ -263,9 +263,9 @@ export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) impleme
   }
 
   negate() {
-    this.x.neg();
-    this.y.neg();
-    this.z.neg();
+    this.x = this.x.neg();
+    this.y = this.y.neg();
+    this.z = this.z.neg();
     return this;
   }
 

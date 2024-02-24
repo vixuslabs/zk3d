@@ -1,7 +1,37 @@
-import { Struct } from "o1js";
-import { Vector3} from "./Vector3.js";
-import { Real64 } from "./Real64.js";
-import { Matrix4 } from "./Matrix4.js";
+import { Struct, Bool } from "o1js";
+import { Vector3} from "./Vector3";
+import { Real64 } from "./Real64";
+import { Matrix4 } from "./Matrix4";
+
+interface Matrix3Class {
+  n11: Real64;
+  n12: Real64;
+  n13: Real64;
+  n21: Real64;
+  n22: Real64;
+  n23: Real64;
+  n31: Real64;
+  n32: Real64;
+  n33: Real64;
+  set: (n11: Real64, n12: Real64, n13: Real64, n21: Real64, n22: Real64, n23: Real64, n31: Real64, n32: Real64, n33: Real64) => Matrix3;
+  identity: () => Matrix3;
+  copy: (m: Matrix3) => Matrix3;
+  setFromMatrix4: (m: Matrix4) => Matrix3;
+  toArray: () => Real64[];
+  extractBasis: (xAxis: Vector3, yAxis: Vector3, zAxis: Vector3) => Matrix3;
+  clone: () => Matrix3;
+  multiplyScalar: (s: Real64) => Matrix3;
+  multiply: (m: Matrix3) => Matrix3;
+  premultiply: (m: Matrix3) => Matrix3;
+  multiplyMatrices: (a: Matrix3, b: Matrix3) => Matrix3;
+  determinant: () => Real64;
+  transpose: () => Matrix3;
+  invert: () => Matrix3;
+  scale: (s: Vector3) => Matrix3;
+  makeTranslation: (x: Real64, y: Real64) => Matrix3;
+  makeShear: (x: Real64, y: Real64) => Matrix3;
+  equals: (m: Matrix3) => Bool;
+}
 
 export class Matrix3 extends Struct({
   n11: Real64,
@@ -13,7 +43,7 @@ export class Matrix3 extends Struct({
   n31: Real64,
   n32: Real64,
   n33: Real64,
-}) {
+}) implements Matrix3Class {
   constructor(value: {
     n11: Real64,
     n12: Real64,
@@ -28,7 +58,17 @@ export class Matrix3 extends Struct({
     super(value);
   }
 
-  set(n11: Real64, n12: Real64, n13: Real64, n21: Real64, n22: Real64, n23: Real64, n31: Real64, n32: Real64, n33: Real64) {
+  set(
+    n11: Real64,
+    n12: Real64,
+    n13: Real64,
+    n21: Real64,
+    n22: Real64,
+    n23: Real64,
+    n31: Real64,
+    n32: Real64,
+    n33: Real64
+    ) {
     this.n11 = n11;
     this.n12 = n12;
     this.n13 = n13;
@@ -143,7 +183,9 @@ export class Matrix3 extends Struct({
     return this.multiplyMatrices(m, this);
   }
 
-  multiplyMatrices(a: Matrix3, b: Matrix3) {
+  multiplyMatrices(at: Matrix3, bt: Matrix3) {
+    const a = at.transpose();
+    const b = bt.transpose();
     const a11 = a.n11, a12 = a.n12, a13 = a.n13;
     const a21 = a.n21, a22 = a.n22, a23 = a.n23;
     const a31 = a.n31, a32 = a.n32, a33 = a.n33;
@@ -164,13 +206,13 @@ export class Matrix3 extends Struct({
     this.n32 = a31.mul(b12).add(a32.mul(b22)).add(a33.mul(b32));
     this.n33 = a31.mul(b13).add(a32.mul(b23)).add(a33.mul(b33));
 
-    return this;
+    return this.transpose();
   }
 
   determinant() {
-    const a = this.n11, b = this.n12, c = this.n13;
-    const d = this.n21, e = this.n22, f = this.n23;
-    const g = this.n31, h = this.n32, i = this.n33;
+    const a = this.n11, b = this.n21, c = this.n31;
+    const d = this.n12, e = this.n22, f = this.n32;
+    const g = this.n13, h = this.n23, i = this.n33;
     return a.mul(e).mul(i).add(b.mul(f).mul(g)).add(c.mul(d).mul(h)).sub(c.mul(e).mul(g)).sub(b.mul(d).mul(i)).sub(a.mul(f).mul(h));
   }
 
@@ -196,10 +238,7 @@ export class Matrix3 extends Struct({
     const g = this.n31, h = this.n32, i = this.n33;
 
     const det = this.determinant();
-    if (det.equals(Real64.zero)) {
-      console.error('Matrix3: determinant is zero, cannot invert.');
-      return this.identity();
-    }
+    det.integer.toField().assertNotEquals(0, 'Matrix3: determinant is zero, cannot invert.');
 
     const invDet = det.inv();
 
@@ -241,13 +280,12 @@ export class Matrix3 extends Struct({
     return this;
   }
 
-  makeScale(x: Real64, y: Real64) {
-    this.set(
-      x, Real64.zero, Real64.zero,
-      Real64.zero, y, Real64.zero,
-      Real64.zero, Real64.zero, Real64.from(1),
-    );
-    return this;
+  static makeScale(x: Real64, y: Real64) {
+    return new Matrix3({
+      n11: x, n12: Real64.zero, n13: Real64.zero,
+      n21: Real64.zero, n22: y, n23: Real64.zero,
+      n31: Real64.zero, n32: Real64.zero, n33: Real64.from(1),
+    });
   }
 
   makeShear(x: Real64, y: Real64) {

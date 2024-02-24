@@ -1,7 +1,62 @@
-import { Struct } from "o1js";
-import { Vector3} from "./Vector3.js";
-import { Real64 } from "./Real64.js";
-import { Matrix3 } from "./Matrix3.js";
+import { Struct, Bool } from "o1js";
+import { Vector3} from "./Vector3";
+import { Real64 } from "./Real64";
+import { Matrix3 } from "./Matrix3";
+
+interface Matrix4Class {
+  n11: Real64;
+  n12: Real64;
+  n13: Real64;
+  n14: Real64;
+  n21: Real64;
+  n22: Real64;
+  n23: Real64;
+  n24: Real64;
+  n31: Real64;
+  n32: Real64;
+  n33: Real64;
+  n34: Real64;
+  n41: Real64;
+  n42: Real64;
+  n43: Real64;
+  n44: Real64;
+  set: (
+    n11: Real64,
+    n12: Real64,
+    n13: Real64,
+    n14: Real64,
+    n21: Real64,
+    n22: Real64,
+    n23: Real64,
+    n24: Real64,
+    n31: Real64,
+    n32: Real64,
+    n33: Real64,
+    n34: Real64,
+    n41: Real64,
+    n42: Real64,
+    n43: Real64,
+    n44: Real64
+  ) => Matrix4;
+  identity: () => Matrix4;
+  elements: () => Real64[];
+  clone: () => Matrix4;
+  copy: (m: Matrix4) => Matrix4;
+  copyPosition: (m: Matrix4) => Matrix4;
+  setFromMatrix3: (m: Matrix3) => Matrix4;
+  extractBasis: (xAxis: Vector3, yAxis: Vector3, zAxis: Vector3) => Matrix4;
+  makeBasis: (xAxis: Vector3, yAxis: Vector3, zAxis: Vector3) => Matrix4;
+  multiply: (m: Matrix4) => Matrix4;
+  premultiply: (m: Matrix4) => Matrix4;
+  multiplyMatrices: (a: Matrix4, b: Matrix4) => Matrix4;
+  multiplyScalar: (s: Real64) => Matrix4;
+  determinant: () => Real64;
+  transpose: () => Matrix4;
+  setPosition: (v: Vector3) => Matrix4;
+  invert: () => Matrix4;
+  scale: (v: Vector3) => Matrix4;
+  equals: (m: Matrix4) => Bool;
+}
 
 export class Matrix4 extends Struct({
   n11: Real64,
@@ -20,7 +75,7 @@ export class Matrix4 extends Struct({
   n42: Real64,
   n43: Real64,
   n44: Real64,
-}) {
+}) implements Matrix4Class {
   constructor(value: {
     n11: Real64;
     n12: Real64;
@@ -234,7 +289,9 @@ export class Matrix4 extends Struct({
     return this.multiplyMatrices(m, this);
   }
 
-  multiplyMatrices(a: Matrix4, b: Matrix4) {
+  multiplyMatrices(at: Matrix4, bt: Matrix4) {
+    const a = at.transpose();
+    const b = bt.transpose();
     const a11 = a.n11, a12 = a.n12, a13 = a.n13, a14 = a.n14;
     const a21 = a.n21, a22 = a.n22, a23 = a.n23, a24 = a.n24;
     const a31 = a.n31, a32 = a.n32, a33 = a.n33, a34 = a.n34;
@@ -265,7 +322,7 @@ export class Matrix4 extends Struct({
     this.n43 = a41.mul(b13).add(a42.mul(b23)).add(a43.mul(b33)).add(a44.mul(b43));
     this.n44 = a41.mul(b14).add(a42.mul(b24)).add(a43.mul(b34)).add(a44.mul(b44));
 
-    return this;
+    return this.transpose();
   }
 
   multiplyScalar(s: Real64) {
@@ -289,10 +346,10 @@ export class Matrix4 extends Struct({
   }
 
   determinant() {
-    const n11 = this.n11, n12 = this.n12, n13 = this.n13, n14 = this.n14;
-    const n21 = this.n21, n22 = this.n22, n23 = this.n23, n24 = this.n24;
-    const n31 = this.n31, n32 = this.n32, n33 = this.n33, n34 = this.n34;
-    const n41 = this.n41, n42 = this.n42, n43 = this.n43, n44 = this.n44;
+    const n11 = this.n11, n12 = this.n21, n13 = this.n31, n14 = this.n41;
+    const n21 = this.n12, n22 = this.n22, n23 = this.n32, n24 = this.n42;
+    const n31 = this.n13, n32 = this.n23, n33 = this.n33, n34 = this.n43;
+    const n41 = this.n14, n42 = this.n24, n43 = this.n34, n44 = this.n44;
 
     return (
       n41.mul(
@@ -323,7 +380,7 @@ export class Matrix4 extends Struct({
         )
       ))
       .add(n44.mul(
-        Real64.zero.sub(n13.mul(n22.mul(n31)))
+        n13.neg().mul(n22.mul(n31))
         .sub(n11.mul(n23.mul(n32)))
         .add(n11.mul(n22.mul(n33)))
         .add(n13.mul(n21.mul(n32)))
@@ -352,10 +409,10 @@ export class Matrix4 extends Struct({
   }
 
   invert() {
-    const n11 = this.n11, n12 = this.n12, n13 = this.n13, n14 = this.n14;
-    const n21 = this.n21, n22 = this.n22, n23 = this.n23, n24 = this.n24;
-    const n31 = this.n31, n32 = this.n32, n33 = this.n33, n34 = this.n34;
-    const n41 = this.n41, n42 = this.n42, n43 = this.n43, n44 = this.n44;
+    const n11 = this.n11, n12 = this.n21, n13 = this.n31, n14 = this.n41;
+    const n21 = this.n12, n22 = this.n22, n23 = this.n32, n24 = this.n42;
+    const n31 = this.n13, n32 = this.n23, n33 = this.n33, n34 = this.n43;
+    const n41 = this.n14, n42 = this.n24, n43 = this.n34, n44 = this.n44;
 
     const t11 = n23.mul(n34.mul(n42)) .sub(n24.mul(n33.mul(n42))) .add(n24.mul(n32.mul(n43))) .sub(n22.mul(n34.mul(n43))) .sub(n23.mul(n32.mul(n44))) .add(n22.mul(n33.mul(n44)));
     const t12 = n14.mul(n33.mul(n42)) .sub(n13.mul(n34.mul(n42))) .sub(n14.mul(n32.mul(n43))) .add(n12.mul(n34.mul(n43))) .add(n13.mul(n32.mul(n44))) .sub(n12.mul(n33.mul(n44)));
@@ -363,14 +420,8 @@ export class Matrix4 extends Struct({
     const t14 = n14.mul(n23.mul(n32)) .sub(n13.mul(n24.mul(n32))) .sub(n14.mul(n22.mul(n33))) .add(n12.mul(n24.mul(n33))) .add(n13.mul(n22.mul(n34))) .sub(n12.mul(n23.mul(n34)));
 
     const det = n11.mul(t11) .add(n21.mul(t12)) .add(n31.mul(t13)) .add(n41.mul(t14));
-    if (det.equals(Real64.zero)) {
-      return this.set(
-        Real64.zero, Real64.zero, Real64.zero, Real64.zero,
-        Real64.zero, Real64.zero, Real64.zero, Real64.zero,
-        Real64.zero, Real64.zero, Real64.zero, Real64.zero,
-        Real64.zero, Real64.zero, Real64.zero, Real64.zero
-      );
-    }
+
+    det.integer.toField().assertNotEquals(0, 'Matrix4: determinant is zero, cannot invert.');
 
     this.n11 = t11.mul(det.inv());
     this.n21 = t12.mul(det.inv());
@@ -465,26 +516,25 @@ export class Matrix4 extends Struct({
   // TODO: makeRotationZ
   // TODO: makeRotationAxis
 
-  makeScale(x: Real64, y: Real64, z: Real64) {
-    this.set(
-      x,
-      Real64.zero,
-      Real64.zero,
-      Real64.zero,
-      Real64.zero,
-      y,
-      Real64.zero,
-      Real64.zero,
-      Real64.zero,
-      Real64.zero,
-      z,
-      Real64.zero,
-      Real64.zero,
-      Real64.zero,
-      Real64.zero,
-      Real64.from(1)
-    );
-    return this;
+  static makeScale(x: Real64, y: Real64, z: Real64) {
+    return new Matrix4({
+      n11: x,
+      n12: Real64.zero,
+      n13: Real64.zero,
+      n14: Real64.zero,
+      n21: Real64.zero,
+      n22: y,
+      n23: Real64.zero,
+      n24: Real64.zero,
+      n31: Real64.zero,
+      n32: Real64.zero,
+      n33: z,
+      n34: Real64.zero,
+      n41: Real64.zero,
+      n42: Real64.zero,
+      n43: Real64.zero,
+      n44: Real64.from(1)
+    });
   }
 
   makeShear(x: Real64, y: Real64, z: Real64) {
