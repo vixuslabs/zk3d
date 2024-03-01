@@ -90,19 +90,19 @@ export class Real64 extends Struct({ integer: Int64 }) implements Real64Class {
   }
 
   add(other: Real64) {
-    return new Real64({ integer : this.integer.add(other.integer) });
+    return new Real64({ integer: this.integer.add(other.integer) });
   }
 
   sub(other: Real64) {
-    return new Real64({ integer : this.integer.sub(other.integer) });
+    return new Real64({ integer: this.integer.sub(other.integer) });
   }
 
   mul(other: Real64) {
-    return new Real64({ integer : this.integer.mul(other.integer).div(Real64.SCALE) });
+    return new Real64({ integer: this.integer.mul(other.integer).div(Real64.SCALE) });
   }
 
   div(other: Real64) {
-    return new Real64({ integer : this.integer.mul(Real64.SCALE).div(other.integer) });
+    return new Real64({ integer: this.integer.mul(Real64.SCALE).div(other.integer) });
   }
 
   isPositive() {

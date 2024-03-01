@@ -16,7 +16,6 @@ describe('Plane operations', () => {
     const coplanarPointZ = ZK3D.Vector3.fromNumbers(pointOnPlane[0], pointOnPlane[1], pointOnPlane[2]);
     zkPlane.setFromNormalAndCoplanarPoint(zkPlane.normal, coplanarPointZ);
     threePlane.setFromNormalAndCoplanarPoint(threePlane.normal, new THREE.Vector3(...pointOnPlane));
-
     expect(zkPlane.normal.toArray()).toEqual([threePlane.normal.x, threePlane.normal.y, threePlane.normal.z]);
     expect(zkPlane.constant.toNumber()).toBeCloseTo(threePlane.constant);
   });

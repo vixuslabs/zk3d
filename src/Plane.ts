@@ -54,7 +54,7 @@ export class Plane extends Struct({
 
   setFromNormalAndCoplanarPoint(normal: Vector3, point: Vector3) {
     this.normal = normal;
-    this.constant = normal.dot(point);
+    this.constant = normal.dot(point).neg();
     return this;
   }
 

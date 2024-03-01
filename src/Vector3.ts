@@ -32,6 +32,7 @@ interface Vector3Class {
   setFromMatrix3Column: (m: Matrix3, index: number) => Vector3;
   equals: (v: Vector3) => Bool;
   fromArray: (array: Real64[], offset: number) => Vector3;
+  toArray: () => number[];
   divide: (v: Vector3) => Vector3;
   divideScalar: (s: Real64) => Vector3;
   negate: () => Vector3;
@@ -46,12 +47,12 @@ interface Vector3Class {
 }
 
 export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) implements Vector3Class {
-  constructor(value: { x: Real64; y: Real64; z: Real64 }) { 
+  constructor(value: { x: Real64; y: Real64; z: Real64 }) {
     super(value);
   }
 
-  static fromNumbers(x: number , y: number, z: number) {
-    return new Vector3({ 
+  static fromNumbers(x: number, y: number, z: number) {
+    return new Vector3({
       x: Real64.from(x),
       y: Real64.from(y),
       z: Real64.from(z),
@@ -70,7 +71,7 @@ export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) impleme
     return `Vector3( ${this.x.toString()}, ${this.y.toString()}, ${this.z.toString()} )`;
   }
 
-  set(x: Real64, y: Real64, z: Real64 ) {
+  set(x: Real64, y: Real64, z: Real64) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -253,8 +254,8 @@ export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) impleme
     return this;
   }
 
-  toArray() {
-    return [this.x, this.y, this.z];
+  toArray(): number[] {
+    return [this.x.toNumber(), this.y.toNumber(), this.z.toNumber()];
   }
 
   // transformDirection(m: Matrix4) {
