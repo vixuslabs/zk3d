@@ -1,4 +1,4 @@
-import { Struct } from "o1js";
+import { Struct, Bool } from "o1js";
 import { Matrix4 } from "./Matrix4";
 import { Real64 } from "./Real64";
 import { Matrix3 } from "./Matrix3";
@@ -30,12 +30,14 @@ interface Vector3Class {
   applyMatrix4: (m: Matrix4) => Vector3;
   setFromMatrixColumn: (m: Matrix4, index: number) => Vector3;
   setFromMatrix3Column: (m: Matrix3, index: number) => Vector3;
+  equals: (v: Vector3) => Bool;
   fromArray: (array: Real64[], offset: number) => Vector3;
   divide: (v: Vector3) => Vector3;
   divideScalar: (s: Real64) => Vector3;
   negate: () => Vector3;
   dot: (v: Vector3) => Real64;
   lengthSq: () => Real64;
+  quasiNormalize: () => Vector3;
   lerp: (v: Vector3, alpha: Real64) => Vector3;
   lerpVectors: (v1: Vector3, v2: Vector3, alpha: Real64) => Vector3;
   cross: (v: Vector3) => Vector3;
@@ -53,6 +55,14 @@ export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) impleme
       x: Real64.from(x),
       y: Real64.from(y),
       z: Real64.from(z),
+    });
+  }
+
+  static empty() {
+    return new Vector3({
+      x: Real64.zero,
+      y: Real64.zero,
+      z: Real64.zero,
     });
   }
 
@@ -229,6 +239,13 @@ export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) impleme
     return this.fromArray(m.toArray(), index * 3);
   }
 
+  equals(v: Vector3) {
+    return Bool.and(
+      this.x.equals(v.x),
+      Bool.and(this.y.equals(v.y), this.z.equals(v.z))
+    );
+  }
+
   fromArray(array: Real64[], offset: number = 0) {
     this.x = array[offset];
     this.y = array[offset + 1];
@@ -275,6 +292,10 @@ export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) impleme
 
   lengthSq() {
     return this.x.mul(this.x).add(this.y.mul(this.y)).add(this.z.mul(this.z));
+  }
+
+  quasiNormalize() {
+    return this.divideScalar(this.lengthSq());
   }
 
   lerp(v: Vector3, alpha: Real64) {
