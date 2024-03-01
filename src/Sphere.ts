@@ -1,7 +1,7 @@
 import { Struct, Bool } from 'o1js';
-import { Real64 } from './Real64.js';
-import { Vector3 } from './Vector3.js';
-import { Plane } from './Plane.js';
+import { Real64 } from './Real64';
+import { Vector3 } from './Vector3';
+import { Plane } from './Plane';
 
 interface SphereClass {
   radius: Real64;

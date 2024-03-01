@@ -253,6 +253,10 @@ export class Vector3 extends Struct({ x: Real64, y: Real64, z: Real64 }) impleme
     return this;
   }
 
+  toArray() {
+    return [this.x, this.y, this.z];
+  }
+
   // transformDirection(m: Matrix4) {
   //   const x = this.x;
   //   const y = this.y;

@@ -1,8 +1,8 @@
 import { Struct, Bool } from 'o1js';
-import { Real64 } from './Real64.js';
-import { Vector3 } from './Vector3.js';
-import { Sphere } from './Sphere.js';
-import { Box3 } from './Box3.js';
+import { Real64 } from './Real64';
+import { Vector3 } from './Vector3';
+import { Sphere } from './Sphere';
+import { Box3 } from './Box3';
 
 interface PlaneClass {
   normal: Vector3;
@@ -15,7 +15,7 @@ interface PlaneClass {
   negate: () => Plane;
   distanceToPoint: (point: Vector3) => Real64;
   distanceToSphere: (sphere: Sphere) => Real64;
-  projectPoint: (point: Vector3) => Vector3;
+  projectPoint: (point: Vector3, target: Vector3) => Vector3;
   intersectLine: (start: Vector3, end: Vector3) => Vector3;
   intersectsLine: (start: Vector3, end: Vector3) => Bool;
   intersectsSphere: (sphere: Sphere) => Bool;
@@ -40,6 +40,10 @@ export class Plane extends Struct({
     this.normal = normal;
     this.constant = constant;
     return this;
+  }
+
+  toArray() {
+    return [this.normal.x, this.normal.y, this.normal.z, this.constant];
   }
 
   setComponents(x: Real64, y: Real64, z: Real64, w: Real64) {
@@ -82,8 +86,8 @@ export class Plane extends Struct({
     return this.distanceToPoint(sphere.center).sub(sphere.radius);
   }
 
-  projectPoint(point: Vector3) {
-    return point.clone().sub(this.normal.clone().multiplyScalar(this.distanceToPoint(point)));
+  projectPoint(point: Vector3, target: Vector3) {
+    return target.copy(this.normal).multiplyScalar(this.distanceToPoint(point).neg()).add(point);
   }
 
   intersectLine(start: Vector3, end: Vector3) {

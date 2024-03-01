@@ -1,6 +1,6 @@
 import { Struct, Bool, Provable } from 'o1js';
-import { Real64 } from './Real64.js';
-import { Vector3 } from './Vector3.js';
+import { Real64 } from './Real64';
+import { Vector3 } from './Vector3';
 import { Plane } from './Plane.js';
 
 interface Box3Class {
