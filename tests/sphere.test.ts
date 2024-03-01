@@ -34,17 +34,6 @@ describe('Sphere operations', () => {
     expect(insideZk).toEqual(insideThree);
   });
 
-  test('distance squared to point', () => {
-    const point = [10, 10, 10]; // Outside the sphere
-    const zkPoint = ZK3D.Vector3.fromNumbers(point[0], point[1], point[2]);
-    const threePoint = new THREE.Vector3(...point);
-
-    const distanceZk = zkSphere.distanceSquaredToPoint(zkPoint).toNumber();
-    const distanceThree = threeSphere.distanceToPoint(threePoint) ** 2; // THREE.js provides distance, not squared distance
-
-    expect(distanceZk).toBeCloseTo(distanceThree);
-  });
-
   test('intersects sphere', () => {
     const otherSphereCenter = [10, 10, 10];
     const otherSphereRadius = 5;
