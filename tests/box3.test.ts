@@ -1,24 +1,6 @@
 import * as ZK3D from '../src/index';
 import * as THREE from 'three';
 
-const roundZk3dVector = (vector: ZK3D.Vector3, precision: number) => {
-  return {
-    x: round(vector.x.toNumber(), precision),
-    y: round(vector.y.toNumber(), precision),
-    z: round(vector.z.toNumber(), precision)
-  };
-};
-
-const roundThreeVector = (vector: THREE.Vector3, precision: number) => {
-  return {
-    x: round(vector.x, precision),
-    y: round(vector.y, precision),
-    z: round(vector.z, precision)
-  };
-};
-
-const round = (x: number, precision: number) => Math.round(x * Math.pow(10, precision)) / Math.pow(10, precision);
-
 describe('Box3 operations', () => {
   const min = [0, 0, 0];
   const max = [1, 1, 1];
@@ -41,8 +23,17 @@ describe('Box3 operations', () => {
     zk3dBox.setFromCenterAndSize(centerVectorZ, sizeVectorZ);
     threeBox.setFromCenterAndSize(centerVectorT, sizeVectorT);
 
-    expect(roundZk3dVector(zk3dBox.getCenter(ZK3D.Vector3.empty()), 4)).toEqual(roundThreeVector(threeBox.getCenter(new THREE.Vector3()), 4));
-    expect(roundZk3dVector(zk3dBox.getSize(ZK3D.Vector3.empty()), 4)).toEqual(roundThreeVector(threeBox.getSize(new THREE.Vector3()), 4));
+    const zk3dCenter = zk3dBox.getCenter(ZK3D.Vector3.empty());
+    const zk3dSize = zk3dBox.getSize(ZK3D.Vector3.empty());
+    const threeCenter = threeBox.getCenter(new THREE.Vector3());
+    const threeSize = threeBox.getSize(new THREE.Vector3());
+
+    expect(zk3dCenter.x.toNumber()).toBeCloseTo(threeCenter.x, 4);
+    expect(zk3dCenter.y.toNumber()).toBeCloseTo(threeCenter.y, 4);
+    expect(zk3dCenter.z.toNumber()).toBeCloseTo(threeCenter.z, 4);
+    expect(zk3dSize.x.toNumber()).toBeCloseTo(threeSize.x, 4);
+    expect(zk3dSize.y.toNumber()).toBeCloseTo(threeSize.y, 4);
+    expect(zk3dSize.z.toNumber()).toBeCloseTo(threeSize.z, 4);
   });
 
   test('clone and copy', () => {
@@ -51,11 +42,22 @@ describe('Box3 operations', () => {
   
     const threeClonedBox = threeBox.clone();
     const threeCopiedBox = new THREE.Box3().copy(threeBox);
-  
-    expect(roundZk3dVector(clonedBoxZ.min, 4)).toEqual(roundThreeVector(threeClonedBox.min, 4));
-    expect(roundZk3dVector(clonedBoxZ.max, 4)).toEqual(roundThreeVector(threeClonedBox.max, 4));
-    expect(roundZk3dVector(copiedBoxZ.min, 4)).toEqual(roundThreeVector(threeCopiedBox.min, 4));
-    expect(roundZk3dVector(copiedBoxZ.max, 4)).toEqual(roundThreeVector(threeCopiedBox.max, 4));
+
+    // Clone assertions
+    expect(clonedBoxZ.min.x.toNumber()).toBeCloseTo(threeClonedBox.min.x, 4);
+    expect(clonedBoxZ.min.y.toNumber()).toBeCloseTo(threeClonedBox.min.y, 4);
+    expect(clonedBoxZ.min.z.toNumber()).toBeCloseTo(threeClonedBox.min.z, 4);
+    expect(clonedBoxZ.max.x.toNumber()).toBeCloseTo(threeClonedBox.max.x, 4);
+    expect(clonedBoxZ.max.y.toNumber()).toBeCloseTo(threeClonedBox.max.y, 4);
+    expect(clonedBoxZ.max.z.toNumber()).toBeCloseTo(threeClonedBox.max.z, 4);
+
+    // Copy assertions
+    expect(copiedBoxZ.min.x.toNumber()).toBeCloseTo(threeCopiedBox.min.x, 4);
+    expect(copiedBoxZ.min.y.toNumber()).toBeCloseTo(threeCopiedBox.min.y, 4);
+    expect(copiedBoxZ.min.z.toNumber()).toBeCloseTo(threeCopiedBox.min.z, 4);
+    expect(copiedBoxZ.max.x.toNumber()).toBeCloseTo(threeCopiedBox.max.x, 4);
+    expect(copiedBoxZ.max.y.toNumber()).toBeCloseTo(threeCopiedBox.max.y, 4);
+    expect(copiedBoxZ.max.z.toNumber()).toBeCloseTo(threeCopiedBox.max.z, 4);
   });
 
   test('expand by vector', () => {
@@ -63,16 +65,20 @@ describe('Box3 operations', () => {
     zk3dBox.expandByVector(expandVectorZ);
     threeBox.expandByVector(new THREE.Vector3(0.5, 0.5, 0.5));
   
-    expect(roundZk3dVector(zk3dBox.min, 4)).toEqual(roundThreeVector(threeBox.min, 4));
-    expect(roundZk3dVector(zk3dBox.max, 4)).toEqual(roundThreeVector(threeBox.max, 4));
+    expect(zk3dBox.min.x.toNumber()).toBeCloseTo(threeBox.min.x, 4);
+    expect(zk3dBox.min.y.toNumber()).toBeCloseTo(threeBox.min.y, 4);
+    expect(zk3dBox.min.z.toNumber()).toBeCloseTo(threeBox.min.z, 4);
+    expect(zk3dBox.max.x.toNumber()).toBeCloseTo(threeBox.max.x, 4);
+    expect(zk3dBox.max.y.toNumber()).toBeCloseTo(threeBox.max.y, 4);
+    expect(zk3dBox.max.z.toNumber()).toBeCloseTo(threeBox.max.z, 4);
   });
-
+  
   test('contains point', () => {
     const pointZ = ZK3D.Vector3.fromNumbers(0.5, 0.5, 0.5);
     const threePoint = new THREE.Vector3(0.5, 0.5, 0.5);
     expect(zk3dBox.containsPoint(pointZ).toBoolean()).toEqual(threeBox.containsPoint(threePoint));
   });
-
+  
   test('intersects box', () => {
     const otherBoxZ = new ZK3D.Box3({
       min: ZK3D.Vector3.fromNumbers(0.5, 0.5, 0.5),
@@ -82,7 +88,9 @@ describe('Box3 operations', () => {
       new THREE.Vector3(0.5, 0.5, 0.5),
       new THREE.Vector3(1.5, 1.5, 1.5)
     );
-
+  
     expect(zk3dBox.intersectsBox(otherBoxZ).toBoolean()).toEqual(threeBox.intersectsBox(threeOtherBox));
-    });
+  });
+
 });
+  
