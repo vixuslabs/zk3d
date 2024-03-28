@@ -1,6 +1,6 @@
 {
   "name": "zk3d",
-  "version": "0.19.0",
+  "version": "0.24.0",
   "description": "General-purpose 3D library compatible with o1js and Mina zkApps.",
   "type": "module",
   "main": "build/src/index.js",
